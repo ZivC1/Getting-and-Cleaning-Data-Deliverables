@@ -13,9 +13,6 @@ setwd("UCI HAR Dataset")
 x_test <- read.table("./test/X_test.txt", na.strings = NA)
 y_test <- read.table("./test/y_test.txt", na.strings = NA)
 subject_test <- read.table("./test/subject_test.txt", na.strings = NA)
-
-
-
 x_train <- read.table("./train/X_train.txt", na.strings = NA)
 y_train <- read.table("./train/y_train.txt", na.strings = NA)
 subject_train <- read.table("./train/subject_train.txt", na.strings = NA)
@@ -47,7 +44,7 @@ col_names <- rbind(temp, col_names)  # attach "user_id to front
 
 temp  <- data.frame(V2 = "activity_code", stringsAsFactors = FALSE)
 col_names <- rbind(col_names, temp)  # attach "activity code" to back
-col_names <- t(col_names)  # put all names in columns in stead of rows
+col_names <- t(col_names)  # put all names in columns instead of rows
 colnames(unified) <- as.vector(col_names) #"unified" now has all columns
 
 # search of indices of column names that fits the criteria
@@ -73,9 +70,10 @@ unified_mean_std$activity_code <- NULL
 #-----------------------------------
 library (dplyr)
 by_id_activity <- unified_mean_std %>% group_by(user_id, activity_label)
-summarized_tidy_data <- by_id_activity %>% summarise_each(funs(mean))
+summarized_tidy_data <- by_id_activity %>% summarise_each(funs(mean)) # this var holds the requested result
 
-write.csv(summarized_tidy_data, row.names = FALSE,  file = "summ_tidy_data.txt")
+## Final step - writing the result to a file
+#---------------------------------------------
 
-bb <- read.table("summ_tidy_data.txt", col.names = TRUE)
-  
+write.table(summarized_tidy_data,  file = "summ_tidy_data.txt")
+
